@@ -1,13 +1,5 @@
-# Armory Spinnaker AWS Quickstart - Step 3 
-## Deploy to EC2 and EKS
-
-### First, login to your Minnaker GUI.  You can access it by getting the Public IP address from your AWS Console.
-
-If you have forgotten the password to your Minnaker instance you can always use this command when SSH'd into the Minnaker instance (Not inside the Halyard Container)
-
-```code
-cat /etc/spinnaker/.hal/.secret/spinnaker_password
-```
+# Armory Spinnaker AWS Quickstart 
+## Deploy to EC2 AutoScale Groups
 
 1. Create Application called **QuickStart** by clicking "**Applications**" tab > "**Action**" (top right) > "**Create New App**" with the following Settings
 

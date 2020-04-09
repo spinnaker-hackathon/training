@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: special-config
+data:
+  SPECIAL_LEVEL: very
+  SPECIAL_TYPE: charm
+  VALUE: '${execution[''id'']} ${execution[''id''].toLowerCase()}'

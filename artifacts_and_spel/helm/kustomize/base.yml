@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-today
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-today
+  template:
+    metadata:
+      labels:
+        app: hello-today
+        lb: hello-today
+    spec:
+      containers:
+        - image: 'justinrlee/nginx:latest'
+          name: primary
+          ports:
+            - containerPort: 80

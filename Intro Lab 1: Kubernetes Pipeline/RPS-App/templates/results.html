@@ -1,0 +1,28 @@
+{% from 'play.html' import play %}
+
+{% extends "layout.html" %}
+
+{% block content %}
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="post-preview">
+            <h2 class="post-title">
+              You played: {{ playerGesture.decode('utf-8') }}
+            </h2>
+            <h2 class="post-title">
+                Computer played: {{ computerGesture.decode('utf-8') }}
+            </h2>
+            <h2 class="post-title">
+                {{ winner }} wins!
+            </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  {{ play() }}
+
+  {% endblock %}

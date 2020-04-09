@@ -14,6 +14,8 @@ RUN pip install -r requirements.txt
 
 COPY RPS-App /app
 
+ENV LANG C.UTF-8
+
 ENTRYPOINT [ "python" ]
 
 CMD [ "app.py" ]

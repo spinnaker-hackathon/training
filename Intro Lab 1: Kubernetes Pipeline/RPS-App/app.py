@@ -1,22 +1,36 @@
-from flask import Flask
-from flask import request
-import os
-import random
+# -*- coding: utf-8 -*-
+from flask import Flask, jsonify, request, render_template
+from flask_cors import CORS
+import os, random
 
 app = Flask(__name__)
+app.config.from_object(__name__)
+
+# enable CORS
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 @app.route('/')
 def hello():
-    os.environ['RPS_USER'] = 'username'
+    username = os.getenv('RPS_USER', "RPS Master")
     playgame = '<p><br><a href="compete?gesture=1">play game</a>'
-    return '<html><title>RPS</title><body><h1>Hey, we have Flask in a Docker container!</h1>' + playgame + '<p>RPSWEB_PORT: ' + os.getenv('RPSWEB_PORT') + '</body></html>'
+    blah = '<html><title>RPS</title><body><h1>Welcome ' + username + '!</h1>' + playgame + '<p>RPSWEB_PORT: ' + os.getenv('RPSWEB_PORT', "80") + '</body></html>'
+    return render_template('index.html', username=username) 
 
 @app.route('/compete')
 def compete():
-    gesture = gestureMap(request.args.get('gesture', random.randint(0, 2), type=int))
-    print (gesture)
-    computergesture = gestureMap(random.randint(0, 2))
-    return "<html><title>RPS</title><body><h3>You played : " + gesture + "<br> Computer played: " + computergesture + "<br><br>Result: " + whoWon(gesture, computergesture) + " won </h3></body></html>"
+    username = os.getenv('RPS_USER', "RPS Master")
+    print (username)
+    playerGesture = gestureMap(request.args.get('gesture', random.randint(0, 2), type=int))
+    print (playerGesture)
+    computerGesture = gestureMap(random.randint(0, 2))
+    print (computerGesture)
+    winner = whoWon(playerGesture, computerGesture, username)
+    print (winner)
+    return render_template('results.html', username=username, playerGesture = gestureIcon(playerGesture), computerGesture = gestureIcon(computerGesture), winner = winner)
+
+@app.route('/ping', methods=['GET'])
+def ping_pong():
+    return jsonify(ping="pong!")
 
 def gestureMap(gestureIndex):
     gestures = {
@@ -26,23 +40,31 @@ def gestureMap(gestureIndex):
     }
     return gestures.get(gestureIndex, "foul")
 
-def whoWon(playergesture, computergesture):
+def gestureIcon(gesture):
+    gestureIcons = {
+        "rock": "👊",
+        "paper": "🖐",
+        "scissors": "✌️"
+    }
+    return gestureIcons.get(gesture, "🧨")
+
+def whoWon(playergesture, computergesture, playername):
     winner = "no one"
     if (playergesture == "rock"):
         if (computergesture == "paper"):
             winner = "computer"
         elif (computergesture == "scissors"):
-            winner = "you"
+            winner = playername
     elif (playergesture == "paper"):
         if (computergesture == "rock"):
-            winner = "you"
+            winner = playername
         if (computergesture == "scissors"):
             winner = "computer"
     else:
         if (computergesture == "rock"):
             winner = "computer"
         elif (computergesture == "paper"):
-            winner = "you"
+            winner = playername
     return winner
 
 

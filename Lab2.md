@@ -21,3 +21,5 @@
 ### Note - Don't mind the red dot in the Bake Stage.  It's informational suggesting a CI Trigger should be configured for a Bake Stage to ensure you are deploying the latest code and artifacts
 
 ![No CREATE Permission](/AutoScale-Group.png)
+
+Now Review your what your pipeline has created in Spinnaker.  Look at the Server Groups and Instance.

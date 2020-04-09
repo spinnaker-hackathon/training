@@ -17,7 +17,7 @@ spec:
         - envFrom:
             - configMapRef:
                 name: rps-config
-          image: 'away168/rps:v0.1.1'
+          image: 'away168/rps'
           name: rps
           ports:
             - containerPort: 80

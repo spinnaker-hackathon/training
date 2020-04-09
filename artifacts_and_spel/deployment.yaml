@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rs-configmap
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rs-configmap
+  template:
+    metadata:
+      labels:
+        app: rs-configmap
+    spec:
+      containers:
+        - command:
+            - tail
+            - '-f'
+            - /dev/null
+          envFrom:
+            - configMapRef:
+                name: special-config
+          image: k8s.gcr.io/busybox
+          name: test-container

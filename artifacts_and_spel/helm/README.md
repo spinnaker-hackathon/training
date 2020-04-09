@@ -1,0 +1,1 @@
+Helm chart is hosted at: https://armory-sales-justin-public.s3-us-west-2.amazonaws.com/helm-0.1.0.tgz

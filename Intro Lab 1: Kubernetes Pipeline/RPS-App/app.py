@@ -9,24 +9,26 @@ app.config.from_object(__name__)
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
+username = os.getenv('RPS_USER', "RPS Master")
+version = os.getenv('RPS_VERSION', "alpha")
+
 @app.route('/')
 def hello():
-    username = os.getenv('RPS_USER', "RPS Master")
-    playgame = '<p><br><a href="compete?gesture=1">play game</a>'
-    blah = '<html><title>RPS</title><body><h1>Welcome ' + username + '!</h1>' + playgame + '<p>RPSWEB_PORT: ' + os.getenv('RPSWEB_PORT', "80") + '</body></html>'
-    return render_template('index.html', username=username) 
+    print (username)
+    print (version)
+    return render_template('index.html', version=version, username=username) 
 
 @app.route('/compete')
 def compete():
-    username = os.getenv('RPS_USER', "RPS Master")
     print (username)
+    print (version)
     playerGesture = gestureMap(request.args.get('gesture', random.randint(0, 2), type=int))
     print (playerGesture)
     computerGesture = gestureMap(random.randint(0, 2))
     print (computerGesture)
     winner = whoWon(playerGesture, computerGesture, username)
     print (winner)
-    return render_template('results.html', username=username, playerGesture = gestureIcon(playerGesture), computerGesture = gestureIcon(computerGesture), winner = winner)
+    return render_template('results.html', version=version, username=username, playerGesture = gestureIcon(playerGesture), computerGesture = gestureIcon(computerGesture), winner = winner)
 
 @app.route('/ping', methods=['GET'])
 def ping_pong():

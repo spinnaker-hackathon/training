@@ -1,11 +1,11 @@
 # Armory Spinnaker AWS Quickstart 
 ## Deploy to EC2 AutoScale Groups
 
-1. Create Application called "**SpinnakerEC2**" by clicking "**Applications**" tab > "**Action**" (top right) > "**Create New App**" with the following Settings
+1. Create Application called "**YourName**" by clicking "**Applications**" tab > "**Action**" (top right) > "**Create New App**" with the following Settings
 
 ![No CREATE Permission](/New-App.png)
   
-2. Go into Application "**SpinnakerEC2**" and create first pipeline to deploy and EC2 instance
+2. Go into Application "**YourName**" and create first pipeline to deploy and EC2 instance
 3. Click **Add Stage +** and search for a **Bake** stage to bake AMI
 4. Select the AWS Region you would like to deploy in
 5. Click **Add Server Group** and configure basic AMI bake settings (Account, Region, Subnet, Instance Type, and AWS SSH key)

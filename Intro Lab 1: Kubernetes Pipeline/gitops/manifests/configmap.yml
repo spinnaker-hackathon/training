@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  RPS_USER: '${parameters.user}'
+kind: ConfigMap
+metadata:
+  name: rps-config
+  namespace: '${execution.application}'

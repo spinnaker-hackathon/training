@@ -1,0 +1,194 @@
+{
+    "application": "lab1-k8s",
+    "spec": {
+        "email": "andrew.way@armory.io"
+    },
+    "globals": {
+        "waitTime": "10"
+    },
+    "deleteStalePipelines": false,
+    "pipelines": [
+        {
+            "application": "lab1-k8s",
+            "name": "My First K8s Pipeline (gitops)",
+            "keepWaitingPipelines": false,
+            "lastModifiedBy": "andrew.way@armory.io",
+            "limitConcurrent": true,
+            "parameterConfig": [
+                {
+                    "default": "${trigger.user}",
+                    "description": "What is your RPS Username?",
+                    "hasOptions": false,
+                    "label": "RPS_USER",
+                    "name": "user",
+                    "options": [
+                        {
+                            "value": ""
+                        }
+                    ],
+                    "pinned": true,
+                    "required": false
+                }
+            ],
+            "stages": [
+                {
+                    "account": "spinnaker",
+                    "cloudProvider": "kubernetes",
+                    "manifests": [
+                        {
+                            "apiVersion": "v1",
+                            "kind": "Service",
+                            "metadata": {
+                                "name": "rps-service",
+                                "namespace": "${execution.application}"
+                            },
+                            "spec": {
+                                "ports": [
+                                    {
+                                        "port": 80,
+                                        "protocol": "TCP",
+                                        "targetPort": 80
+                                    }
+                                ],
+                                "selector": {
+                                    "app": "rps"
+                                },
+                                "type": "LoadBalancer"
+                            }
+                        }
+                    ],
+                    "moniker": {
+                        "app": "lab1-k8s"
+                    },
+                    "name": "Deploy Service",
+                    "namespaceOverride": "",
+                    "refId": "1",
+                    "requisiteStageRefIds": [
+                        "3"
+                    ],
+                    "skipExpressionEvaluation": false,
+                    "source": "text",
+                    "trafficManagement": {
+                        "enabled": false,
+                        "options": {
+                            "enableTraffic": false,
+                            "services": []
+                        }
+                    },
+                    "type": "deployManifest"
+                },
+                {
+                    "account": "spinnaker",
+                    "cloudProvider": "kubernetes",
+                    "manifests": [
+                        {
+                            "apiVersion": "v1",
+                            "data": {
+                                "RPS_USER": "${parameters.user}"
+                            },
+                            "kind": "ConfigMap",
+                            "metadata": {
+                                "name": "rps-config",
+                                "namespace": "${execution.application}"
+                            }
+                        },
+                        {
+                            "apiVersion": "apps/v1",
+                            "kind": "Deployment",
+                            "metadata": {
+                                "name": "rps",
+                                "namespace": "${execution.application}"
+                            },
+                            "spec": {
+                                "replicas": 1,
+                                "selector": {
+                                    "matchLabels": {
+                                        "app": "rps"
+                                    }
+                                },
+                                "template": {
+                                    "metadata": {
+                                        "labels": {
+                                            "app": "rps"
+                                        }
+                                    },
+                                    "spec": {
+                                        "containers": [
+                                            {
+                                                "envFrom": [
+                                                    {
+                                                        "configMapRef": {
+                                                            "name": "rps-config"
+                                                        }
+                                                    }
+                                                ],
+                                                "image": "away168/rps:v0.1.1",
+                                                "name": "rps",
+                                                "ports": [
+                                                    {
+                                                        "containerPort": 80
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "moniker": {
+                        "app": "lab1-k8s"
+                    },
+                    "name": "Deploy App",
+                    "namespaceOverride": "",
+                    "refId": "2",
+                    "requisiteStageRefIds": [
+                        "1"
+                    ],
+                    "skipExpressionEvaluation": false,
+                    "source": "text",
+                    "trafficManagement": {
+                        "enabled": false,
+                        "options": {
+                            "enableTraffic": false,
+                            "services": []
+                        }
+                    },
+                    "type": "deployManifest"
+                },
+                {
+                    "account": "spinnaker",
+                    "cloudProvider": "kubernetes",
+                    "manifests": [
+                        {
+                            "apiVersion": "v1",
+                            "kind": "Namespace",
+                            "metadata": {
+                                "name": "${execution.application}"
+                            }
+                        }
+                    ],
+                    "moniker": {
+                        "app": "lab1-k8s"
+                    },
+                    "name": "Create NS",
+                    "namespaceOverride": "",
+                    "refId": "3",
+                    "requisiteStageRefIds": [],
+                    "skipExpressionEvaluation": false,
+                    "source": "text",
+                    "trafficManagement": {
+                        "enabled": false,
+                        "options": {
+                            "enableTraffic": false,
+                            "services": []
+                        }
+                    },
+                    "type": "deployManifest"
+                }
+            ],
+            "triggers": [],
+            "updateTs": "1586418495000"
+        }
+    ]
+}

@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: special-config
-data:
-  favorite.color: Purple
-  home.city: San Leandro
